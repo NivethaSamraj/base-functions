@@ -1,43 +1,32 @@
-import { test } from '../fixtures/testFixture';
+Running 1 test using 1 worker
 
-test('diag - haven size selection', async ({ page }) => {
-  await page.goto('https://staging.havenwellwithin.com/organic-cotton-slub-jersey-short-sleeve-tee/P262730056.html?dwvar_P262730056_color=GARMENT%20DYE%20WHISPER%20PINK&dwvar_P262730056_sizeType=MS&cgid=haven-categories-lounge-tees-and-tanks');
-  await page.locator('#onetrust-accept-btn-handler').click({ timeout: 5000 }).catch(() => {});
-  await page.waitForTimeout(1500);
+     1 [chromium] › tests\diag.spec.ts:3:5 › diag - haven size selection
 
-  // 1. List all size swatches with their state
-  const sizes = page.locator('a.swatchanchor');
-  const n = await sizes.count();
-  console.log(`\n=== ${n} swatchanchor(s) ===`);
-  for (let i = 0; i < Math.min(n, 10); i++) {
-    const s = sizes.nth(i);
-    const cls = await s.getAttribute('class').catch(() => '');
-    const checked = await s.getAttribute('aria-checked').catch(() => '');
-    const title = await s.getAttribute('title').catch(() => '');
-    const vis = await s.isVisible().catch(() => false);
-    console.log(`[${i}] vis=${vis} aria-checked=${checked} title="${title}" class="${cls}"`);
-  }
+=== 11 swatchanchor(s) ===
+[0] vis=true aria-checked=false title="Select color: GARMENT DYE NIGHTFALL" class="swatchanchor"
+[1] vis=true aria-checked=false title="Select color: GARMENT DYE TRELLIS" class="swatchanchor"
+[2] vis=true aria-checked=true title="Select color: GARMENT DYE WHISPER PINK" class="swatchanchor"
+[3] vis=true aria-checked=false title="Select color: WHITE" class="swatchanchor"
+[4] vis=true aria-checked=false title="Select size: XXS" class="swatchanchor"
+[5] vis=true aria-checked=false title="Select size: XS" class="swatchanchor"
+[6] vis=true aria-checked=false title="Select size: S" class="swatchanchor"
+[7] vis=true aria-checked=false title="Select size: M" class="swatchanchor"
+[8] vis=true aria-checked=false title="Select size: L" class="swatchanchor"
+[9] vis=true aria-checked=false title="Select size: XL" class="swatchanchor"
 
-  // 2. Click the first visible size and re-check
-  console.log('\n=== clicking first visible size ===');
-  for (let i = 0; i < n; i++) {
-    const s = sizes.nth(i);
-    if (await s.isVisible().catch(() => false)) {
-      await s.scrollIntoViewIfNeeded().catch(() => {});
-      await s.click().catch(e => console.log('click error:', e.message));
-      console.log(`clicked size [${i}] title="${await s.getAttribute('title')}"`);
-      break;
-    }
-  }
-  await page.waitForTimeout(2000);
+=== clicking first visible size ===
+clicked size [0] title="Select color: GARMENT DYE NIGHTFALL"
 
-  // 3. Re-check add-to-cart state
-  const main = page.locator('button#add-to-cart:not(.stickybarbutton)').first();
-  const cls = await main.getAttribute('class').catch(() => '');
-  console.log(`\n=== after size click, main button class="${cls}" ===`);
+=== after size click, main button class="button-fancy-large add-to-cart-disabled" ===
+selected-size indicators found: 1
+=== end ===
 
-  // 4. Is there a separate "selected size" indicator?
-  const selectedSize = await page.locator('.swatchanchor.selected, .swatchanchor[aria-checked="true"], .selected-value, .size .selected-value').count().catch(() => 0);
-  console.log(`selected-size indicators found: ${selectedSize}`);
-  console.log('=== end ===\n');
-});
+  ✓  1 [chromium] › tests\diag.spec.ts:3:5 › diag - haven size selection (25.7s)
+
+  1 passed (27.4s)
+
+To open last HTML report run:
+
+  npx playwright show-report
+
+PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
