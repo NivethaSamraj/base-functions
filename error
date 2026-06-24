@@ -1,8 +1,6 @@
-e2e.spec.ts --headed --workers=1
-
 Running 1 test using 1 worker
 
-  ✘  1 ….spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order (545ms)
+  ✘  1 ….spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order (736ms)
 
 
   1) retail-framework\tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
@@ -17,6 +15,4 @@ Running 1 test using 1 worker
 
   1 failed
     retail-framework\tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)> echo $env:BRAND
-saucedemo
 PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)> 
