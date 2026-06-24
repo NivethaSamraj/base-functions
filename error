@@ -1,33 +1,13 @@
-Running 1 test using 1 worker
+import { Page } from '@playwright/test';
+import { BasePDPPage } from '../base/BasePDPPage';
 
-     1 [chromium] › tests\diag.spec.ts:3:5 › diag - talbots size selection
-
-=== 11 swatchanchor(s) ===
-[0] vis=true title="Select sizeType: Misses" class="swatchanchor"
-[1] vis=true title="Select sizeType: Petite" class="swatchanchor"
-[2] vis=true title="Select sizeType: Plus" class="swatchanchor"
-[3] vis=true title="Select sizeType: Plus Petite" class="swatchanchor"
-[4] vis=true title="Select color: IVORY" class="swatchanchor"
-[5] vis=true title="Select color: MAUVE GLOW" class="swatchanchor"
-[6] vis=true title="Select size: XS" class="swatchanchor"
-[7] vis=true title="Select size: S" class="swatchanchor"
-[8] vis=true title="Select size: M" class="swatchanchor"
-[9] vis=true title="Select size: L" class="swatchanchor"
-[10] vis=true title="Select size: XL" class="swatchanchor"
-
-=== clicking first "Select size" swatch ===
-size-only swatches found: 9
-clicked: "Select sizeType: Misses"
-
-main button class="button-fancy-large add-to-cart-disabled" visible=true
-=== end ===
-
-  ✓  1 [chromium] › tests\diag.spec.ts:3:5 › diag - talbots size selection (42.4s)
-
-  1 passed (44.6s)
-
-To open last HTML report run:
-
-  npx playwright show-report
-
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
+/**
+ * Talbots PDP page. Inherits base flow; override a method ONLY if Talbots's
+ * PDP FLOW diverges (extra step/modal). Selectors live in
+ * locators/brands/talbots/pdpLocators.ts.
+ */
+export class TalbotsPDPPage extends BasePDPPage {
+  constructor(page: Page) {
+    super(page, 'talbots');
+  }
+}
