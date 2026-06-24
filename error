@@ -1,10 +1,22 @@
-ound 0 vulnerabilities
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)> npx playwright install chromium
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)> $env:BRAND="saucedemo"; npx playwright test
->> 
+e2e.spec.ts --headed --workers=1
 
-Running 3 tests using 2 workers
+Running 1 test using 1 worker
 
-  -  1 …taylor.live.spec.ts:18:7 › Ann Taylor — live › TC101 - browse PLP, open PDP, add to cart, reach cart
-  ✘  2 …e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order (1.1s)
-  -  3 …:29:7 › Ann Taylor — live › TC102 - guest checkout reaches payment (stops at card until sandbox PAN)
+  ✘  1 ….spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order (545ms)
+
+
+  1) retail-framework\tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
+
+    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    Call log:
+      - navigating to "/", waiting until "load"
+
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\tests\demo.e2e.spec.ts:14:16)
+
+    Error Context: ..\..\test-results\retail-framework-tests-dem-33f0d-wse-add-to-cart-place-order\error-context.md
+
+  1 failed
+    retail-framework\tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
+PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)> echo $env:BRAND
+saucedemo
+PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)> 
