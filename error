@@ -1,56 +1,35 @@
-ight test Browsetocart.spec.ts --headed --workers=1        
+import { test } from '../fixtures/testFixture';
 
-Running 1 test using 1 worker
+test('diag - talbots size selection', async ({ page }) => {
+  await page.goto('https://staging.talbots.com/embroidered-voile-top/P262075296.html?cgid=apparel-blouses-and-shirts&dwvar_P262075296_color=IVORY&dwvar_P262075296_sizeType=MS');
+  await page.locator('#onetrust-accept-btn-handler').click({ timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(1500);
 
-  ✘  1 …20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart (1.6m)
+  const sizes = page.locator('a.swatchanchor');
+  const n = await sizes.count();
+  console.log(`\n=== ${n} swatchanchor(s) ===`);
+  for (let i = 0; i < Math.min(n, 14); i++) {
+    const s = sizes.nth(i);
+    const title = await s.getAttribute('title').catch(() => '');
+    const cls = await s.getAttribute('class').catch(() => '');
+    const vis = await s.isVisible().catch(() => false);
+    console.log(`[${i}] vis=${vis} title="${title}" class="${cls}"`);
+  }
 
+  // click first SIZE swatch (title^=Select size)
+  console.log('\n=== clicking first "Select size" swatch ===');
+  const sizeOnly = page.locator('a.swatchanchor[title^="Select size"]');
+  const sc = await sizeOnly.count();
+  console.log(`size-only swatches found: ${sc}`);
+  if (sc > 0) {
+    const first = sizeOnly.first();
+    await first.scrollIntoViewIfNeeded().catch(() => {});
+    await first.click().catch(e => console.log('click err:', e.message));
+    console.log(`clicked: "${await first.getAttribute('title')}"`);
+  }
+  await page.waitForTimeout(2000);
 
-  1) [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
-
-    TimeoutError: locator.click: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('button#add-to-cart:not(.add-to-cart-disabled):not(.stickybarbutton)').first()
-
-
-       at ..\page-objects\base\BasePDPPage.ts:75
-
-      73 |     const btn = this.L.addToCart(this.page).first();
-      74 |     await btn.scrollIntoViewIfNeeded().catch(() => {});
-    > 75 |     await btn.click();
-         |               ^
-      76 |   }
-      77 |
-      78 |   async goToCart(): Promise<void> {
-        at TalbotsPDPPage.addToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\page-objects\base\BasePDPPage.ts:75:15)
-        at CheckoutScenarios.browseAndAddToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\scenarios\CheckoutScenarios.ts:30:5)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\tests\Browsetocart.spec.ts:33:25)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1662:9)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1154:11)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1660:7)
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  1 failed
-    [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
-
-To open last HTML report run:
-
-  npx playwright show-report
-
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
+  const main = page.locator('button#add-to-cart').first();
+  console.log(`\nmain button class="${await main.getAttribute('class').catch(()=>'')}" visible=${await main.isVisible().catch(()=>false)}`);
+  console.log('=== end ===\n');
+});
