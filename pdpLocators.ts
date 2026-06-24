@@ -21,9 +21,12 @@ export const havenwellwithinPDPLocators: PdpLocatorsOverride = {
   sizeOption: (page: Page) =>
     page.locator('a.swatchanchor:not(.unselectable):not(.disabled)'),
 
-  // Enabled Add to Bag only (excludes the disabled pre-size-selection state).
+  // Enabled Add to Bag only, and NOT the sticky-bar duplicate.
+  // Haven's PDP has TWO #add-to-cart buttons: the main one in the product area,
+  // and a 'stickybarbutton' pinned copy that's hidden until you scroll. Excluding
+  // the sticky one (and the disabled pre-size state) targets the real visible button.
   addToCart: (page: Page) =>
-    page.locator('button#add-to-cart:not(.add-to-cart-disabled)'),
+    page.locator('button#add-to-cart:not(.add-to-cart-disabled):not(.stickybarbutton)'),
 
   // Header bag link to cart (same as Talbots' mini-cart).
   goToCartLink: (page: Page) => page.locator('a.mini-cart-link-cart').first(),
