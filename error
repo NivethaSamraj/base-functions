@@ -1,5 +1,43 @@
+import { test } from '../fixtures/testFixture';
 
-=== Found 2 add-to-cart candidate(s) ===
-[0] id="add-to-cart" type="button" visible=true class="button-fancy-large add-to-cart-disabled" text="Add to Bag"
-[1] id="add-to-cart" type="null" visible=false class="stickybarbutton add-to-cart" text="Add to Bag"
-=== end ===
+test('diag - haven size selection', async ({ page }) => {
+  await page.goto('https://staging.havenwellwithin.com/organic-cotton-slub-jersey-short-sleeve-tee/P262730056.html?dwvar_P262730056_color=GARMENT%20DYE%20WHISPER%20PINK&dwvar_P262730056_sizeType=MS&cgid=haven-categories-lounge-tees-and-tanks');
+  await page.locator('#onetrust-accept-btn-handler').click({ timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(1500);
+
+  // 1. List all size swatches with their state
+  const sizes = page.locator('a.swatchanchor');
+  const n = await sizes.count();
+  console.log(`\n=== ${n} swatchanchor(s) ===`);
+  for (let i = 0; i < Math.min(n, 10); i++) {
+    const s = sizes.nth(i);
+    const cls = await s.getAttribute('class').catch(() => '');
+    const checked = await s.getAttribute('aria-checked').catch(() => '');
+    const title = await s.getAttribute('title').catch(() => '');
+    const vis = await s.isVisible().catch(() => false);
+    console.log(`[${i}] vis=${vis} aria-checked=${checked} title="${title}" class="${cls}"`);
+  }
+
+  // 2. Click the first visible size and re-check
+  console.log('\n=== clicking first visible size ===');
+  for (let i = 0; i < n; i++) {
+    const s = sizes.nth(i);
+    if (await s.isVisible().catch(() => false)) {
+      await s.scrollIntoViewIfNeeded().catch(() => {});
+      await s.click().catch(e => console.log('click error:', e.message));
+      console.log(`clicked size [${i}] title="${await s.getAttribute('title')}"`);
+      break;
+    }
+  }
+  await page.waitForTimeout(2000);
+
+  // 3. Re-check add-to-cart state
+  const main = page.locator('button#add-to-cart:not(.stickybarbutton)').first();
+  const cls = await main.getAttribute('class').catch(() => '');
+  console.log(`\n=== after size click, main button class="${cls}" ===`);
+
+  // 4. Is there a separate "selected size" indicator?
+  const selectedSize = await page.locator('.swatchanchor.selected, .swatchanchor[aria-checked="true"], .selected-value, .size .selected-value').count().catch(() => 0);
+  console.log(`selected-size indicators found: ${selectedSize}`);
+  console.log('=== end ===\n');
+});
