@@ -1,35 +1,33 @@
-import { test } from '../fixtures/testFixture';
+Running 1 test using 1 worker
 
-test('diag - talbots size selection', async ({ page }) => {
-  await page.goto('https://staging.talbots.com/embroidered-voile-top/P262075296.html?cgid=apparel-blouses-and-shirts&dwvar_P262075296_color=IVORY&dwvar_P262075296_sizeType=MS');
-  await page.locator('#onetrust-accept-btn-handler').click({ timeout: 5000 }).catch(() => {});
-  await page.waitForTimeout(1500);
+     1 [chromium] › tests\diag.spec.ts:3:5 › diag - talbots size selection
 
-  const sizes = page.locator('a.swatchanchor');
-  const n = await sizes.count();
-  console.log(`\n=== ${n} swatchanchor(s) ===`);
-  for (let i = 0; i < Math.min(n, 14); i++) {
-    const s = sizes.nth(i);
-    const title = await s.getAttribute('title').catch(() => '');
-    const cls = await s.getAttribute('class').catch(() => '');
-    const vis = await s.isVisible().catch(() => false);
-    console.log(`[${i}] vis=${vis} title="${title}" class="${cls}"`);
-  }
+=== 11 swatchanchor(s) ===
+[0] vis=true title="Select sizeType: Misses" class="swatchanchor"
+[1] vis=true title="Select sizeType: Petite" class="swatchanchor"
+[2] vis=true title="Select sizeType: Plus" class="swatchanchor"
+[3] vis=true title="Select sizeType: Plus Petite" class="swatchanchor"
+[4] vis=true title="Select color: IVORY" class="swatchanchor"
+[5] vis=true title="Select color: MAUVE GLOW" class="swatchanchor"
+[6] vis=true title="Select size: XS" class="swatchanchor"
+[7] vis=true title="Select size: S" class="swatchanchor"
+[8] vis=true title="Select size: M" class="swatchanchor"
+[9] vis=true title="Select size: L" class="swatchanchor"
+[10] vis=true title="Select size: XL" class="swatchanchor"
 
-  // click first SIZE swatch (title^=Select size)
-  console.log('\n=== clicking first "Select size" swatch ===');
-  const sizeOnly = page.locator('a.swatchanchor[title^="Select size"]');
-  const sc = await sizeOnly.count();
-  console.log(`size-only swatches found: ${sc}`);
-  if (sc > 0) {
-    const first = sizeOnly.first();
-    await first.scrollIntoViewIfNeeded().catch(() => {});
-    await first.click().catch(e => console.log('click err:', e.message));
-    console.log(`clicked: "${await first.getAttribute('title')}"`);
-  }
-  await page.waitForTimeout(2000);
+=== clicking first "Select size" swatch ===
+size-only swatches found: 9
+clicked: "Select sizeType: Misses"
 
-  const main = page.locator('button#add-to-cart').first();
-  console.log(`\nmain button class="${await main.getAttribute('class').catch(()=>'')}" visible=${await main.isVisible().catch(()=>false)}`);
-  console.log('=== end ===\n');
-});
+main button class="button-fancy-large add-to-cart-disabled" visible=true
+=== end ===
+
+  ✓  1 [chromium] › tests\diag.spec.ts:3:5 › diag - talbots size selection (42.4s)
+
+  1 passed (44.6s)
+
+To open last HTML report run:
+
+  npx playwright show-report
+
+PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
