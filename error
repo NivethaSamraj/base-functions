@@ -1,29 +1,62 @@
-Running 1 test using 1 worker
+ ✘  1 …0:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart (54.5s)
 
-     1 [chromium] › tests\diag.spec.ts:3:5 › diag - haven size selection
 
-=== 11 swatchanchor(s) ===
-[0] vis=true aria-checked=false title="Select color: GARMENT DYE NIGHTFALL" class="swatchanchor"
-[1] vis=true aria-checked=false title="Select color: GARMENT DYE TRELLIS" class="swatchanchor"
-[2] vis=true aria-checked=true title="Select color: GARMENT DYE WHISPER PINK" class="swatchanchor"
-[3] vis=true aria-checked=false title="Select color: WHITE" class="swatchanchor"
-[4] vis=true aria-checked=false title="Select size: XXS" class="swatchanchor"
-[5] vis=true aria-checked=false title="Select size: XS" class="swatchanchor"
-[6] vis=true aria-checked=false title="Select size: S" class="swatchanchor"
-[7] vis=true aria-checked=false title="Select size: M" class="swatchanchor"
-[8] vis=true aria-checked=false title="Select size: L" class="swatchanchor"
-[9] vis=true aria-checked=false title="Select size: XL" class="swatchanchor"
+  1) [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
 
-=== clicking first visible size ===
-clicked size [0] title="Select color: GARMENT DYE NIGHTFALL"
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('a.mini-cart-link-cart').first().first()
+        - locator resolved to <a title="Go to Bag" class="button mini-cart-link-cart secondary" href="https://staging.havenwellwithin.com/cart">View Bag</a>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        54 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
 
-=== after size click, main button class="button-fancy-large add-to-cart-disabled" ===
-selected-size indicators found: 1
-=== end ===
 
-  ✓  1 [chromium] › tests\diag.spec.ts:3:5 › diag - haven size selection (25.7s)
+       at ..\page-objects\base\BasePDPPage.ts:79
 
-  1 passed (27.4s)
+      77 |
+      78 |   async goToCart(): Promise<void> {
+    > 79 |     await this.L.goToCartLink(this.page).first().click();
+         |                                                  ^
+      80 |   }
+      81 | }
+        at HavenWellWithinPDPPage.goToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\page-objects\base\BasePDPPage.ts:79:50)
+        at CheckoutScenarios.browseAndAddToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\scenarios\CheckoutScenarios.ts:31:15)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\tests\Browsetocart.spec.ts:33:25)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1662:9)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1154:11)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1660:7)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
 
 To open last HTML report run:
 
