@@ -1,0 +1,49 @@
+import { test, expect } from '../fixtures/testFixture';
+import { DEMO_USER } from '../config/testData';
+
+/**
+ * SauceDemo smoke test — proves the local setup (install, browser, env, baseURL)
+ * works end to end. It drives SauceDemo's real flow directly with its own stable
+ * selectors, rather than through the multi-brand scenario layer, because the demo
+ * site's DOM (no size swatches, minimal checkout) doesn't map cleanly onto the
+ * retail page objects. The real-brand specs exercise the architecture; this one
+ * just confirms the plumbing is green.
+ *
+ * Run: npm run test:saucedemo
+ */
+test.describe('Demo brand — SauceDemo smoke (green)', () => {
+  test('TC001 - login, add to cart, checkout, order complete', async ({ page, brand }) => {
+    test.skip(brand.platform !== 'demo', 'Demo-only spec.');
+
+    // 1. Login
+    await page.goto('https://www.saucedemo.com/');
+    await page.locator('#user-name').fill(DEMO_USER.username);
+    await page.locator('#password').fill(DEMO_USER.password);
+    await page.locator('#login-button').click();
+    await expect(page.locator('.inventory_list')).toBeVisible();
+
+    // 2. Open a product and read its name (PDP)
+    const firstProductName = (await page.locator('.inventory_item_name').first().textContent())?.trim() ?? '';
+    expect(firstProductName.length).toBeGreaterThan(0);
+    await page.locator('.inventory_item_name').first().click();
+    await expect(page.locator('.inventory_details_name')).toHaveText(firstProductName);
+
+    // 3. Add to cart, go to cart
+    await page.locator('button[id^="add-to-cart"]').click();
+    await page.locator('.shopping_cart_link').click();
+    await expect(page.locator('.cart_item')).toHaveCount(1);
+
+    // 4. Checkout — customer info
+    await page.locator('#checkout').click();
+    await page.locator('#first-name').fill('Rahul');
+    await page.locator('#last-name').fill('Test');
+    await page.locator('#postal-code').fill('28202');
+    await page.locator('#continue').click();
+
+    // 5. Finish and confirm
+    await page.locator('#finish').click();
+    await expect(page.locator('.complete-header')).toBeVisible();
+    const confirmation = (await page.locator('.complete-header').textContent())?.trim() ?? '';
+    expect(confirmation.toLowerCase()).toContain('thank you');
+  });
+});
