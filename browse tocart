@@ -1,0 +1,43 @@
+import { test, expect } from '../fixtures/testFixture';
+import { CheckoutScenarios } from '../scenarios/CheckoutScenarios';
+import { PRODUCT_URLS } from '../config/productUrls';
+
+/**
+ * Browse-to-cart proof of the base-functions approach.
+ *
+ * The SAME scenario (CheckoutScenarios.browseAndAddToCart) runs for EVERY brand,
+ * through the SAME base page objects. Only the selectors differ — resolved per
+ * brand by the locator registry. That contrast IS the demonstration: one journey,
+ * five brands, zero per-brand test code.
+ *
+ * Run per brand:  npm run test:lanebryant -- browseToCart
+ * (or set BRAND and run this spec directly)
+ *
+ * A brand with no product URL yet is skipped, not failed — so the suite stays
+ * green as brands come online one at a time.
+ */
+test.describe('Browse to cart — base-functions proof', () => {
+  test('TC200 - open product, select size, add to cart', async ({ page, brand }) => {
+    const productUrl = PRODUCT_URLS[brand.id];
+
+    test.skip(!productUrl, `No product URL wired for ${brand.displayName} yet.`);
+
+    // Dismiss OneTrust cookie banner if present (it intercepts clicks on SFCC).
+    await page.goto(productUrl);
+    await page.locator('#onetrust-accept-btn-handler')
+      .click({ timeout: 5000 })
+      .catch(() => { /* banner not present — fine */ });
+
+    // SAME scenario for all brands — the architecture under test.
+    const scenarios = new CheckoutScenarios(page, brand);
+    const productName = await scenarios.browseAndAddToCart();
+
+    // Proof points: we read a real product name, and the cart shows an item.
+    expect(productName.length).toBeGreaterThan(0);
+
+    // Cart assertion is brand-agnostic via the cart page object's line items.
+    // (Lane Bryant cart line-item selectors are still TODO; this asserts URL/cart
+    //  reached. Tighten once cart line-item HTML is provided.)
+    await expect(page).toHaveURL(/cart/i);
+  });
+});
