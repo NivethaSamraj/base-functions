@@ -1,15 +1,14 @@
-x playwright test Browsetocart.spec.ts --headed --workers=1
 
 Running 1 test using 1 worker
 
-  ✘  1 …20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart (1.5m)
+  ✘  1 …20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart (1.4m)
 
 
   1) [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
 
     TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('button#add-to-cart:not(.add-to-cart-disabled)').filter({ visible: true }).first()
+      - waiting for locator('button#add-to-cart:not(.add-to-cart-disabled):not(.stickybarbutton)').first()
 
 
        at ..\page-objects\base\BasePDPPage.ts:75
@@ -48,9 +47,3 @@ Running 1 test using 1 worker
 
   1 failed
     [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
-
-To open last HTML report run:
-
-  npx playwright show-report
-
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
