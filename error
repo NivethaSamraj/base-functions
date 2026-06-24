@@ -1,27 +1,8 @@
-Running 1 test using 1 worker
-
-  ✘  1 …20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart (1.2m)
-
-
   1) [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
 
     TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('button#add-to-cart:not(.add-to-cart-disabled)').first()
-        - locator resolved to <button id="add-to-cart" title="Add to Bag" value="Add to Bag" class="stickybarbutton add-to-cart">↵Add to Bag</button>
-      - attempting click action
-        2 × waiting for element to be visible, enabled and stable
-          - element is not visible
-        - retrying click action
-        - waiting 20ms
-        2 × waiting for element to be visible, enabled and stable
-          - element is not visible
-        - retrying click action
-          - waiting 100ms
-        55 × waiting for element to be visible, enabled and stable
-           - element is not visible
-         - retrying click action
-           - waiting 500ms
+      - waiting for locator('button#add-to-cart:not(.add-to-cart-disabled):not(.stickybarbutton)').first()
 
 
        at ..\page-objects\base\BasePDPPage.ts:28
@@ -64,5 +45,3 @@ Running 1 test using 1 worker
 To open last HTML report run:
 
   npx playwright show-report
-
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
