@@ -1,81 +1,56 @@
-import { Page } from '@playwright/test';
-import { PdpLocators } from '../../locators/contracts/PDPLocators';
-import { getPDPLocators } from '../../locators/registry/PDPRegistry';
+x playwright test Browsetocart.spec.ts --headed --workers=1
 
-/**
- * Base PDP page object. Holds the Shared/Override method BODIES once; resolves
- * selectors per brand through the registry. Brand seams extend this.
- */
-export class BasePDPPage {
-  protected readonly page: Page;
-  protected readonly L: PdpLocators;
+Running 1 test using 1 worker
 
-  constructor(page: Page, brandId: string) {
-    this.page = page;
-    this.L = getPDPLocators(brandId);
-  }
+  ✘  1 …20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart (1.5m)
 
-  async getProductName(): Promise<string> {
-    return (await this.L.productName(this.page).first().textContent())?.trim() ?? '';
-  }
 
-  /**
-   * Select the first available size and VERIFY it registered.
-   *
-   * Robust version: scrolls the swatch into view, clicks it, then confirms the
-   * selection actually took (aria-checked / selected class). Throws a clear error
-   * instead of silently swallowing — a missed size is the root cause of the
-   * "Add to Bag stays disabled" failure, so we surface it loudly.
-   */
-  async selectFirstAvailableSize(): Promise<void> {
-    const sizes = this.L.sizeOption(this.page);
-    const count = await sizes.count();
-    if (count === 0) {
-      // Product may be single-size / no swatches — not necessarily an error.
-      return;
-    }
+  1) [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
 
-    // Try each visible size until one selects successfully (skips out-of-stock).
-    for (let i = 0; i < count; i++) {
-      const swatch = sizes.nth(i);
-      if (!(await swatch.isVisible().catch(() => false))) continue;
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('button#add-to-cart:not(.add-to-cart-disabled)').filter({ visible: true }).first()
 
-      await swatch.scrollIntoViewIfNeeded().catch(() => {});
-      await swatch.click().catch(() => {});
 
-      // Give the PDP a moment to mark selection + enable Add to Bag.
-      const selected = await this.page
-        .locator('a.swatchanchor[aria-checked="true"], a.swatchanchor.selected, .swatchanchor.selected')
-        .count()
-        .catch(() => 0);
+       at ..\page-objects\base\BasePDPPage.ts:75
 
-      // Also accept "add to cart is now enabled" as proof the size took.
-      const enabled = await this.page
-        .locator('button#add-to-cart:not(.add-to-cart-disabled)')
-        .first()
-        .isVisible()
-        .catch(() => false);
+      73 |     const btn = this.L.addToCart(this.page).first();
+      74 |     await btn.scrollIntoViewIfNeeded().catch(() => {});
+    > 75 |     await btn.click();
+         |               ^
+      76 |   }
+      77 |
+      78 |   async goToCart(): Promise<void> {
+        at HavenWellWithinPDPPage.addToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\page-objects\base\BasePDPPage.ts:75:15)
+        at CheckoutScenarios.browseAndAddToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\scenarios\CheckoutScenarios.ts:30:5)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\tests\Browsetocart.spec.ts:33:25)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1662:9)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1154:11)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1660:7)
 
-      if (selected > 0 || enabled) return;
-    }
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    throw new Error(
-      `Tried ${count} size swatch(es) but none registered as selected ` +
-      `(Add to Bag never enabled). Check the size selector or that any size is in stock.`
-    );
-  }
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  /**
-   * Click Add to Bag. Scrolls into view first (the main button can be below the
-   * fold). Targets the enabled, non-sticky button per the brand's selector.
-   */
-  async addToCart(): Promise<void> {
-    const btn = this.L.addToCart(this.page).first();
-    await btn.scrollIntoViewIfNeeded().catch(() => {});
-    await btn.click();
-  }
+    Error Context: test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\error-context.md
 
-  async goToCart(): Promise<void> {
-    await this.L.goToCartLink(this.page).first().click();
-  }
-}
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
+
+To open last HTML report run:
+
+  npx playwright show-report
+
+PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
