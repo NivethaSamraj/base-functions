@@ -1,25 +1,5 @@
-import { test } from '../fixtures/testFixture';
 
-test('diag - haven add-to-cart buttons', async ({ page }) => {
-  await page.goto('https://staging.havenwellwithin.com/organic-cotton-slub-jersey-short-sleeve-tee/P262730056.html?dwvar_P262730056_color=GARMENT%20DYE%20WHISPER%20PINK&dwvar_P262730056_sizeType=MS&cgid=haven-categories-lounge-tees-and-tanks');
-  await page.locator('#onetrust-accept-btn-handler').click({ timeout: 5000 }).catch(() => {});
-
-  // select first size
-  await page.locator('a.swatchanchor:not(.unselectable):not(.disabled)').first().click().catch(() => {});
-  await page.waitForTimeout(2000);
-
-  // dump every #add-to-cart button
-  const btns = page.locator('button#add-to-cart, button.add-to-cart, button[id*="add-to-cart"]');
-  const n = await btns.count();
-  console.log(`\n=== Found ${n} add-to-cart candidate(s) ===`);
-  for (let i = 0; i < n; i++) {
-    const b = btns.nth(i);
-    const cls = await b.getAttribute('class').catch(() => '(none)');
-    const id = await b.getAttribute('id').catch(() => '(none)');
-    const type = await b.getAttribute('type').catch(() => '(none)');
-    const visible = await b.isVisible().catch(() => false);
-    const text = (await b.textContent().catch(() => ''))?.trim().slice(0, 30);
-    console.log(`[${i}] id="${id}" type="${type}" visible=${visible} class="${cls}" text="${text}"`);
-  }
-  console.log('=== end ===\n');
-});
+=== Found 2 add-to-cart candidate(s) ===
+[0] id="add-to-cart" type="button" visible=true class="button-fancy-large add-to-cart-disabled" text="Add to Bag"
+[1] id="add-to-cart" type="null" visible=false class="stickybarbutton add-to-cart" text="Add to Bag"
+=== end ===
