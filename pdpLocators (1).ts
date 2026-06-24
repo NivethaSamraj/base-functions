@@ -20,12 +20,11 @@ export const talbotsPDPLocators: PdpLocatorsOverride = {
   sizeOption: (page: Page) =>
     page.locator('a.swatchanchor:not(.unselectable):not(.disabled)'),
 
-  // <button id="add-to-cart" ... class="add-to-cart">Add to Bag</button>
-  // Target the ENABLED button only: like Haven (same SFCC instance), Add to Bag
-  // starts as .add-to-cart-disabled until a size is picked, then becomes enabled.
-  // Excluding the disabled state makes Playwright auto-wait for it to be clickable.
+  // Target the ENABLED, non-sticky button. Like Haven (same SFCC instance), the
+  // PDP has a 'stickybarbutton' duplicate that's hidden until scroll, plus the
+  // .add-to-cart-disabled pre-size state. Exclude both to hit the real button.
   addToCart: (page: Page) =>
-    page.locator('button#add-to-cart:not(.add-to-cart-disabled)'),
+    page.locator('button#add-to-cart:not(.add-to-cart-disabled):not(.stickybarbutton)'),
 
   // <a class="mini-cart-link-cart" href=".../cart">View Bag</a>
   // Header bag icon opens the mini-cart; this links straight to the cart page.
