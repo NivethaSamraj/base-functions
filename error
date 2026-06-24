@@ -1,49 +1,25 @@
+import { test } from '../fixtures/testFixture';
 
-Running 1 test using 1 worker
+test('diag - haven add-to-cart buttons', async ({ page }) => {
+  await page.goto('https://staging.havenwellwithin.com/organic-cotton-slub-jersey-short-sleeve-tee/P262730056.html?dwvar_P262730056_color=GARMENT%20DYE%20WHISPER%20PINK&dwvar_P262730056_sizeType=MS&cgid=haven-categories-lounge-tees-and-tanks');
+  await page.locator('#onetrust-accept-btn-handler').click({ timeout: 5000 }).catch(() => {});
 
-  ✘  1 …20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart (1.4m)
+  // select first size
+  await page.locator('a.swatchanchor:not(.unselectable):not(.disabled)').first().click().catch(() => {});
+  await page.waitForTimeout(2000);
 
-
-  1) [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
-
-    TimeoutError: locator.click: Timeout 30000ms exceeded.
-    Call log:
-      - waiting for locator('button#add-to-cart:not(.add-to-cart-disabled):not(.stickybarbutton)').first()
-
-
-       at ..\page-objects\base\BasePDPPage.ts:75
-
-      73 |     const btn = this.L.addToCart(this.page).first();
-      74 |     await btn.scrollIntoViewIfNeeded().catch(() => {});
-    > 75 |     await btn.click();
-         |               ^
-      76 |   }
-      77 |
-      78 |   async goToCart(): Promise<void> {
-        at HavenWellWithinPDPPage.addToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\page-objects\base\BasePDPPage.ts:75:15)
-        at CheckoutScenarios.browseAndAddToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\scenarios\CheckoutScenarios.ts:30:5)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\tests\Browsetocart.spec.ts:33:25)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1662:9)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1154:11)
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1660:7)
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
-    Usage:
-
-        npx playwright show-trace test-results\Browsetocart-Browse-to-car-6de3e-uct-select-size-add-to-cart-chromium\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  1 failed
-    [chromium] › tests\Browsetocart.spec.ts:20:7 › Browse to cart — base-functions proof › TC200 - open product, select size, add to cart 
+  // dump every #add-to-cart button
+  const btns = page.locator('button#add-to-cart, button.add-to-cart, button[id*="add-to-cart"]');
+  const n = await btns.count();
+  console.log(`\n=== Found ${n} add-to-cart candidate(s) ===`);
+  for (let i = 0; i < n; i++) {
+    const b = btns.nth(i);
+    const cls = await b.getAttribute('class').catch(() => '(none)');
+    const id = await b.getAttribute('id').catch(() => '(none)');
+    const type = await b.getAttribute('type').catch(() => '(none)');
+    const visible = await b.isVisible().catch(() => false);
+    const text = (await b.textContent().catch(() => ''))?.trim().slice(0, 30);
+    console.log(`[${i}] id="${id}" type="${type}" visible=${visible} class="${cls}" text="${text}"`);
+  }
+  console.log('=== end ===\n');
+});
