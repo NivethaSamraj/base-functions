@@ -1,18 +1,56 @@
+wright test demo.e2e.spec.ts --headed --workers=1
+
 Running 1 test using 1 worker
 
-  ✘  1 ….spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order (736ms)
+  ✘  1 ….spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order (36.1s)
 
 
-  1) retail-framework\tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
+  1) [chromium] › tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
 
-    Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+    TimeoutError: locator.textContent: Timeout 30000ms exceeded.
     Call log:
-      - navigating to "/", waiting until "load"
+      - waiting for locator('.inventory_details_name').first()
 
-        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\tests\demo.e2e.spec.ts:14:16)
 
-    Error Context: ..\..\test-results\retail-framework-tests-dem-33f0d-wse-add-to-cart-place-order\error-context.md
+       at ..\page-objects\base\BasePDPPage.ts:19
+
+      17 |
+      18 |   async getProductName(): Promise<string> {
+    > 19 |     return (await this.L.productName(this.page).first().textContent())?.trim() ?? '';
+         |                                                         ^
+      20 |   }
+      21 |
+      22 |   async selectFirstAvailableSize(): Promise<void> {
+        at SauceDemoPDPPage.getProductName (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\page-objects\base\BasePDPPage.ts:19:57)
+        at CheckoutScenarios.browseAndAddToCart (C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\scenarios\CheckoutScenarios.ts:28:28)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\tests\demo.e2e.spec.ts:22:41)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1662:9)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1154:11)
+        at C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework\node_modules\playwright\lib\worker\workerProcessEntry.js:1660:7)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\demo.e2e-Demo-brand-—-full-4077a-wse-add-to-cart-place-order-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results\demo.e2e-Demo-brand-—-full-4077a-wse-add-to-cart-place-order-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\demo.e2e-Demo-brand-—-full-4077a-wse-add-to-cart-place-order-chromium\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\demo.e2e-Demo-brand-—-full-4077a-wse-add-to-cart-place-order-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\demo.e2e-Demo-brand-—-full-4077a-wse-add-to-cart-place-order-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
 
   1 failed
-    retail-framework\tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
-PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)> 
+    [chromium] › tests\demo.e2e.spec.ts:11:7 › Demo brand — full journey (green) › TC001 - browse, add to cart, place order 
+
+To open last HTML report run:
+
+  npx playwright show-report
+
+PS C:\Users\nivetha.samraj\Downloads\retail-framework (2)\retail-framework> 
